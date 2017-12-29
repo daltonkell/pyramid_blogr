@@ -43,3 +43,5 @@ def main(argv=sys.argv):
 
         admin = User(name=u'admin', password=u'admin')
         dbsession.add(admin)
+        # when we initialize a fresh database, this will populate it with a
+        # single user, with both login and unencrypted password equal to admin

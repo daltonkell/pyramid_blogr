@@ -1,5 +1,5 @@
 import sqlalchemy as sa
-from paginate_sqlalchemy import SqlalchemyOrmPage #<- provides pagination
+from paginate_sqlalchemy import SqlalchemyOrmPage # provides pagination
 from ..models.blog_record import BlogRecord
 
 
@@ -7,16 +7,35 @@ class BlogRecordService(object):
 
     @classmethod
     def all(cls, request):
+        """
+        Returns a query object that can return an entire dataset when needed.
+        The query object will sort the rows by date in descending order.
+        """
         query = request.dbsession.query(BlogRecord)
         return query.order_by(sa.desc(BlogRecord.created))
 
     @classmethod
     def by_id(cls, _id, request):
+        """
+        Returns either a single blog entry by ID or the None object is nothing
+        is found.
+        """
         query = request.dbsession.query(BlogRecord)
         return query.get(_id)
 
     @classmethod
     def get_paginator(cls, request, page=1):
+        """
+        Returns a paginator object that returns entries from a specific 'page'
+        of records from a database resultset. It will add LIMIT and OFFSET
+        clauses to our query based on the value of items_per_page and the
+        current page number.
+
+        Paginator uses the wrapper SqlalchemyOrmPage which will attempt to
+        generate a paginator with links. Link URLs will be constructed using the
+        function url_maker, which uses the request object to generate a new URL
+        from the current one, replacing the page query param with the new value.
+        """
         query = request.dbsession.query(BlogRecord)
         query = query.order_by(sa.desc(BlogRecord.created))
         query_params = request.GET.mixed()
