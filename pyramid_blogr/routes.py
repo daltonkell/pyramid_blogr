@@ -13,5 +13,6 @@ def includeme(config):
     # e.g. /blog/156/Some-blog-entry
     config.add_route('blog_action', '/blog/{action}',
                      factory='pyramid_blogr.security.BlogRecordFactory')
+    # ^ this route is needed for our authentication
     config.add_route('auth', '/sign/{action}')
     config.add_route('register', '/register')

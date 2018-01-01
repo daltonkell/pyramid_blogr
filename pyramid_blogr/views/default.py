@@ -3,44 +3,18 @@
 # from pyramid.security import remember, forget
 # from ..services.user import UserService
 # from ..services.blog_record import BlogRecordService
-# from ..forms import RegistrationForm
-# from ..models.user import User
 #
-#
-# @view_config(route_name='auth', match_param='action=in', renderer='string',
-#              request_method='POST')
-# @view_config(route_name='auth', match_param='action=out', renderer='string')
-# def sign_in_out(request):
-#     username = request.POST.get('username')
-#     if username:
-#         user = UserService.by_name(username, request=request)
-#         if user and user.verify_password(request.POST.get('password')):
-#             headers = remember(request, user.name)
-#         else:
-#             headers = forget(request)
-#     else:
-#         headers = forget(request)
-#     return HTTPFound(location=request.route_url('home'), headers=headers)
-#
-#
-# @view_config(route_name='register',
-#              renderer='pyramid_blogr:templates/register.jinja2')
-# def register(request):
-#     form = RegistrationForm(request.POST)
-#     if request.method == 'POST' and form.validate():
-#         new_user = User(name=form.username.data)
-#         new_user.set_password(form.password.data.encode('utf8'))
-#         request.dbsession.add(new_user)
-#         return HTTPFound(location=request.route_url('home'))
-#     return {'form': form}
 
 
 from pyramid.response import Response
 from pyramid.view import view_config
-
+from pyramid.httpexceptions import HTTPFound
+from pyramid.security import remember, forget
+from ..services.user import UserService
 from sqlalchemy.exc import DBAPIError
 from ..services.blog_record import BlogRecordService # import from /services
 from ..models.user import User
+from ..forms import RegistrationForm
 
 
 # @view_config(route_name='home', renderer='../templates/mytemplate.jinja2')
@@ -71,7 +45,6 @@ def index_page(request):
     page = int(request.params.get('page', 1))
     paginator = BlogRecordService.get_paginator(request, page)
     return {'paginator': paginator}
-    # return {}
 
 
 db_err_msg = """\
@@ -94,7 +67,21 @@ try it again.
              request_method='POST')
 @view_config(route_name='auth', match_param='action=out', renderer='string')
 def sign_in_out(request):
-    return {}
+    """
+    This function is responsible for creating a sign-in or out view. The
+    functions 'remember' and 'forget' imported from pyramid.security are
+    responsible for setting the current user and signing out the current user.
+    """
+    username = request.POST.get('username')
+    if username:
+        user = UserService.by_name(username, request=request)
+        if user and user.verify_password(request.POST.get('password')):
+            headers = remember(request, user.name)
+        else:
+            headers = forget(request)
+    else:
+        headers = forget(request)
+    return HTTPFound(location=request.route_url('home'), headers=headers)
 
 # these routes will hander user authentication and logout. They do not use a
 # template because they will just perform HTTP redirects, and no one will see
@@ -108,3 +95,14 @@ def sign_in_out(request):
 # Everything we return from our views in dictionaries will be available in
 # templates as variables. So, if we return {'foo': 1, 'bar': 2}, then we will
 # be able to access the variables inside the template directly as foo and bar.
+
+@view_config(route_name='register',
+             renderer='pyramid_blogr:templates/register.jinja2')
+def register(request):
+    form = RegistrationForm(request.POST)
+    if request.method == 'POST' and form.validate():
+        new_user = User(name=form.username.data)
+        new_user.set_password(form.password.data.encode('utf8'))
+        request.dbsession.add(new_user)
+        return HTTPFound(location=request.route_url('home'))
+    return {'form': form}

@@ -7,3 +7,8 @@ class BlogRecordFactory(object):
 
     def __init__(self, request):
         pass
+
+# This is an object called a context factory. It's not tied to any specific entity
+# in a database, and it returns an __acl__ property which says tha everyone has a
+# 'view' permission, and users that are logged in also have 'create' and 'edit'
+# permissions.
