@@ -1,0 +1,26 @@
+{% extends "pyramid_blogr:templates/layout.jinja2" %}
+
+{% block content %}
+    <h1>User Table</h1>
+    <hr/>
+    <p></p>
+    <hr/>
+    <table>
+    {% for d in data %}
+    <TR>
+        <TD class='c1'>{{d.name}}</TD>
+        <TD class='c2'>{{d.password}}</TD>
+        <TD class='c3'>{{d.last_logged}}</TD>
+    </TR>
+    {% endfor %}
+    </table>
+
+    <p><a href="{{ request.route_url('users') }}">Go Back</a></p>
+{% endblock %}
+
+{#
+The _query argument introduced here for the URL generator is a list of key/value
+tuples that will be used to append as GET (query) parameters, separated by a
+question mark. In this case, the URL will be appended by the GET query string
+of ?id=X, where the value of X is the id of the specific blog post to retrieve.
+#}

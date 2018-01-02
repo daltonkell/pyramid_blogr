@@ -16,3 +16,4 @@ def includeme(config):
     # ^ this route is needed for our authentication
     config.add_route('auth', '/sign/{action}')
     config.add_route('register', '/register')
+    config.add_route('users', '/users')
