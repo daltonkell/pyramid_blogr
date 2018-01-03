@@ -5,14 +5,21 @@
     <hr/>
     <p></p>
     <hr/>
-    <table>
-    {% for d in data %}
-    <TR>
-        <TD class='c1'>{{d.name}}</TD>
-        <TD class='c2'>{{d.password}}</TD>
-        <TD class='c3'>{{d.last_logged}}</TD>
-    </TR>
-    {% endfor %}
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Password</th>
+        </tr>
+        {% for d in data %}
+        <tbody>
+          <tr>
+              <td class='c1'>{{d.name}}</td>
+              <td class='c2'>{{d.password}}</td>
+              <td class='c3'>{{d.last_logged}}</td>
+          </tr>
+        </tbody>
+        {% endfor %}
     </table>
 
     <p><a href="{{ request.route_url('users') }}">Go Back</a></p>

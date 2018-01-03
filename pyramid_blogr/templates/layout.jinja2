@@ -1,14 +1,3 @@
-{#<!-- This is a 'master' template from which all the view templates will inherit certain traits.
-Specifically, this template contains a header and footer shared by all pages.
-
-You'll notice that we use the method request.static_url, which generates correct links to your static assets.
-This is handy when building apps using URL prefixes.
-
-In the middle of the template, you'll also notice the tag {% block content%}. After we render a template
-that ingerits from our layout file, this is the place where our index template (or others for other views)
-will appear. -->#}
-
-
 <!DOCTYPE html>
 <html lang="{{request.locale_name}}">
   <head>
@@ -22,10 +11,12 @@ will appear. -->#}
     <title>Cookiecutter Alchemy project for the Pyramid Web Framework</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
+    {#
     <!-- Custom styles for this scaffold -->
     <link href="{{request.static_url('pyramid_blogr:static/theme.css')}}" rel="stylesheet">
+    #}
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
